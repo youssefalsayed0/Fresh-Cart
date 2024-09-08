@@ -1,0 +1,158 @@
+* {
+  box-sizing: border-box;
+}
+:root {
+  --main-padding: 60px 0;
+  --secondry-color: #5b8fff;
+  --section-background: #f5fbff;
+  --main-transition: 0.3s ease-in-out;
+}
+
+html {
+  scroll-behavior:unset !important;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Slide-down animation */
+@keyframes slideDown {
+  from {
+    top: -20%;
+  }
+  to {
+    top: 0;
+  }
+}
+.main-p {
+  padding: var(--main-padding);
+}
+.sec-background {
+  background-color: var(--section-background);
+}
+.main-title {
+  display: inline-block;
+}
+.main-title::after {
+  content: "";
+  position: absolute;
+  width: 60%;
+  height: 3px;
+  background-color: var(--secondry-color);
+  left: 0;
+  bottom: 0;
+}
+.slide-down {
+  animation: slideDown 0.5s ease-out forwards;
+}
+
+.offer {
+  background-color: var(--secondry-color);
+}
+
+footer {
+  background-color: #1111;
+}
+
+.product-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.get-products .rating {
+  color: rgb(255, 208, 0);
+}
+.item .image img {
+  transition: var(--main-transition);
+}
+.item .image:hover img {
+  scale: 1.1;
+}
+.get-products .sale::after {
+  position: absolute;
+  text-align: center;
+  content: "sale";
+  background-color: rgb(0, 102, 255);
+  top: 10px;
+  left: 20px;
+  width: 50px;
+  height: 25px;
+  border-radius: 14px;
+  color: white;
+}
+.get-products .add-cart,
+.get-products .add-whishlist {
+  width: 45px;
+  height: 45px;
+  z-index: 1;
+  color: white;
+  background-color: rgb(202, 202, 202);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--main-transition);
+}
+.get-products .add-cart {
+  bottom: 95px;
+  right: 15px;
+}
+.get-products .add-cart:hover {
+  color: var(--secondry-color);
+}
+.get-products .add-whishlist {
+  top: 15px;
+  right: 15px;
+}
+.get-products .add-whishlist:hover {
+  color: rgb(255, 72, 72);
+}
+.get-categories .image img {
+  height: 250px;
+}
+.get-brands .box {
+  border: 1px solid black;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.product-details .image-prev {
+  width: 70px;
+}
+.landing {
+  height: 100vh;
+  background-image: url("./assets/images/templatesdrive_3d_models_of_8_products_edited.webp");
+  background-position: center;
+  background-size: cover;
+}
+
+.landing .text h1 {
+  font-size: 4.5rem;
+  width: 75%;
+}
+.selected-image {
+  transition: var(--main-transition);
+  border: 2px solid #8f8f8f; /* You can customize the color and width */
+  border-radius: 5px; /* Optional: To round the corners */
+}
+
+.new-arrivals h1 {
+  font-size: 60px;
+}
+
+.wishlist-num{
+  font-size: 14px;
+  bottom: -10px;
+  right: -8px;
+  color: black;
+} 
+
