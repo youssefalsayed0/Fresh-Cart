@@ -2,26 +2,27 @@ import { useContext, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { authContext } from "../../Context/AuthContext";
 import { cartContext } from "../../Context/CartContext";
+import { Offcanvas } from "bootstrap"; // Import Bootstrap JS functionality
 
 export default function Navbar() {
   const navbarRef = useRef(null);
+  const offcanvasRef = useRef(null); // Reference for offcanvas
   const location = useLocation();
   const navigate = useNavigate();
 
   const { token, setToken, userName, setUserName } = useContext(authContext);
-  let {  numOfFavoriteItems ,  numOfCartItems ,  setNumOfCartItems,
-    setNumOfFavoriteItems } = useContext(cartContext);
+  let { numOfFavoriteItems, numOfCartItems, setNumOfCartItems, setNumOfFavoriteItems } =
+    useContext(cartContext);
 
   useEffect(() => {
     const handleScroll = () => {
       const navbar = navbarRef.current;
       if (window.scrollY > 230) {
-        navbar.classList.add("fixed-top", "slide-down",);
+        navbar.classList.add("fixed-top", "slide-down");
       } else {
-        navbar.classList.remove("fixed-top", "slide-down",);
+        navbar.classList.remove("fixed-top", "slide-down");
       }
     };
-
 
     window.addEventListener("scroll", handleScroll);
 
@@ -36,6 +37,27 @@ export default function Navbar() {
     window.scrollTo(0, 0);
   }, [location]);
 
+  useEffect(() => {
+    const offcanvasElement = offcanvasRef.current;
+    const offcanvasInstance = new Offcanvas(offcanvasElement);
+
+    const navLinks = offcanvasElement.querySelectorAll(".nav-link");
+
+    const handleNavLinkClick = () => {
+      offcanvasInstance.hide();
+    };
+
+    navLinks.forEach((link) =>
+      link.addEventListener("click", handleNavLinkClick)
+    );
+
+    // Cleanup event listeners on component unmount
+    return () => {
+      navLinks.forEach((link) =>
+        link.removeEventListener("click", handleNavLinkClick)
+      );
+    };
+  }, []);
 
   function handleLogout() {
     setToken(null);
@@ -48,7 +70,10 @@ export default function Navbar() {
   }
 
   return (
-    <nav ref={navbarRef} className="navbar navbar-expand-lg shadow-sm z-3 bg-white ">
+    <nav
+      ref={navbarRef}
+      className="navbar navbar-expand-lg shadow-sm z-3 bg-white "
+    >
       <div className="container">
         <NavLink className="navbar-brand fs-4 fw-semibold" to="/">
           <i className="fa-solid fa-cart-shopping me-1"></i>
@@ -64,12 +89,26 @@ export default function Navbar() {
           <span className="navbar-toggler-icon" />
         </button>
 
-        <div className="offcanvas offcanvas-end " tabIndex="1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div
+          ref={offcanvasRef} // Reference to offcanvas
+          className="offcanvas offcanvas-end"
+          tabIndex="1"
+          id="offcanvasNavbar"
+          aria-labelledby="offcanvasNavbarLabel"
+          data-bs-backdrop="false"
+        >
           <div className="offcanvas-header">
-            <Link to="/home" className="offcanvas-title" id="offcanvasNavbarLabel"><h3>FreshCart</h3></Link>
-            <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <Link to="/home" className="offcanvas-title" id="offcanvasNavbarLabel">
+              <h3>FreshCart</h3>
+            </Link>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
           </div>
-          <div className="offcanvas-body text-center align-content-center ">
+          <div className="offcanvas-body text-center align-content-center">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
               <li className="nav-item">
                 <NavLink className="nav-link" to="/" activeClassName="active">
@@ -77,12 +116,20 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="products" activeClassName="active">
+                <NavLink
+                  className="nav-link"
+                  to="products"
+                  activeClassName="active"
+                >
                   Products
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="categories" activeClassName="active">
+                <NavLink
+                  className="nav-link"
+                  to="categories"
+                  activeClassName="active"
+                >
                   Categories
                 </NavLink>
               </li>
@@ -136,29 +183,61 @@ export default function Navbar() {
               ) : (
                 <>
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="login" activeClassName="active">
+                    <NavLink
+                      className="nav-link"
+                      to="login"
+                      activeClassName="active"
+                    >
                       Log in
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="/register" activeClassName="active">
+                    <NavLink
+                      className="nav-link"
+                      to="/register"
+                      activeClassName="active"
+                    >
                       Signup
                     </NavLink>
                   </li>
                 </>
               )}
               <li className="nav-item">
-                <NavLink className="nav-link " to="wishlist" activeClassName="active">
+                <NavLink
+                  className="nav-link "
+                  to="wishlist"
+                  activeClassName="active"
+                >
                   Wishlist
-                  <i className="fa-solid fa-heart fa-lg fa-fw ms-2 position-relative" style={{ color: numOfFavoriteItems > 0 ? 'red' : '',}}>
-                  { numOfFavoriteItems > 0 ? <span className='wishlist-num   position-absolute'>{numOfFavoriteItems}</span> : null }
+                  <i
+                    className="fa-solid fa-heart fa-lg fa-fw ms-2 position-relative"
+                    style={{
+                      color: numOfFavoriteItems > 0 ? "red" : "",
+                    }}
+                  >
+                    {numOfFavoriteItems > 0 ? (
+                      <span className="wishlist-num position-absolute">
+                        {numOfFavoriteItems}
+                      </span>
+                    ) : null}
                   </i>
                 </NavLink>
               </li>
               <li className="nav-item">
                 <NavLink className="nav-link" to="cart" activeClassName="active">
                   Cart
-                  <i className="fa-solid fa-bag-shopping fa-lg fa-fw ms-2 position-relative" style={{ color: numOfCartItems > 0 ? '#5b8fff' : '',}}> { numOfCartItems > 0 ? <span className='wishlist-num   position-absolute'>{numOfCartItems}</span> : null }</i>
+                  <i
+                    className="fa-solid fa-bag-shopping fa-lg fa-fw ms-2 position-relative"
+                    style={{
+                      color: numOfCartItems > 0 ? "#5b8fff" : "",
+                    }}
+                  >
+                    {numOfCartItems > 0 ? (
+                      <span className="wishlist-num position-absolute">
+                        {numOfCartItems}
+                      </span>
+                    ) : null}
+                  </i>
                 </NavLink>
               </li>
             </ul>
@@ -166,6 +245,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-
   );
 }

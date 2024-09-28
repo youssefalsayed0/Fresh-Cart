@@ -173,12 +173,20 @@ export default function Payment() {
                     </div>
                   </div>
 
-                  <button
-                    className="w-100 btn btn-dark btn-lg rounded-pill mt-4"
-                    type="submit"
-                  >
-                    Cash Order
-                  </button>
+            <div className="d-flex flex flex-wrap">
+                    <button
+                      className=" btn btn-dark px-3 py-2 me-2 rounded-pill mt-4 flex-grow-1"
+                      type="submit"
+                    >
+                      Cash on delivery 
+                    </button>
+                    <button
+                      className=" btn btn-dark px-3 me-2 py-2 rounded-pill mt-4 flex-grow-1"
+                      type="submit"
+                    >
+                      Online Payment
+                    </button>
+            </div>
                 </form>
               </div>
             </div>

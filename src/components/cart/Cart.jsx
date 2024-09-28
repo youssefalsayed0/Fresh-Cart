@@ -96,7 +96,7 @@ export default function Cart() {
                         allProducts.map((product) => (
                           <div
                             key={product.product.id}
-                            className="row mb-5 d-flex justify-content-between align-items-center"
+                            className="row  d-flex justify-content-between align-items-center"
                           >
                             <div className="col-4 col-md-2 col-lg-2 col-xl-2 mb-3 mb-md-0">
                               <img
@@ -157,6 +157,7 @@ export default function Cart() {
                                 <i className="fas fa-times" />
                               </button>
                             </div>
+                            <hr className="my-4 " />
                           </div>
                         ))
                       ) : (

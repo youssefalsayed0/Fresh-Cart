@@ -77,7 +77,7 @@ export default function WishList() {
             wishListDetails.map((product) => (
               <div
                 key={product.id}
-                className="row d-flex align-items-center justify-content-center"
+                className="row  d-flex align-items-center justify-content-center"
               >
                 <div className="col-md-6 d-flex align-items-center mb-3 mb-md-0">
                   <div className="image me-3" style={{ width: 85 }}>
@@ -132,8 +132,9 @@ export default function WishList() {
                     <i className="fa-solid fa-trash-can fa-lg"></i>
                   </button>
                 </div>
-                <hr className="py-3" />
+                <hr className=" my-4" />
               </div>
+             
             ))
           ) : (
             <div className="py-5 text-center bg-white">
