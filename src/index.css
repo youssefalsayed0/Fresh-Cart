@@ -156,3 +156,10 @@ footer {
   color: black;
 } 
 
+.dropdown-menu {
+  text-align: center;
+
+}
+.dropdown-menu .active {
+  background-color: #f0f0f0;
+}

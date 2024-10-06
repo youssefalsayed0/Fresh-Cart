@@ -10,7 +10,7 @@ import { useContext } from "react";
 export default function GetProducts({ limit, filter }) {
 
   let { addProduct , addToWishList , } = useContext(cartContext);
-    
+   
 
   async function addCartProduct(id) {
     await toast.promise(

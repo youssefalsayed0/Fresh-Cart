@@ -7,7 +7,7 @@ import './index.css'
 import './media.css'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import 'bootstrap/dist/js/bootstrap.bundle.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; 
 
 
 createRoot(document.getElementById('root')).render(
