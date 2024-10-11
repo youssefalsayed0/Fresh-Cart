@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import Cart from "./components/cart/Cart";
 import Home from "./components/home/Home";
 import NotFound from "./components/NotFound/NotFound";
@@ -18,10 +19,17 @@ import BrandProducts from "./components/brandProducts/BrandProducts";
 import CartContextProvider from "./Context/CartContext";
 import { Toaster } from "react-hot-toast";
 import Payment from "./components/Payment/Payment";
+import { Offline } from "react-detect-offline";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import Verification from "./components/Verification/Verification";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
+
+
 
 const router = createBrowserRouter([
   {
-    path: "",element: <Layout />,
+    path: "",
+    element: <Layout />,
     children: [
       { index: true, element: <Home /> },
       { path: "home", element: <Home /> },
@@ -33,6 +41,9 @@ const router = createBrowserRouter([
       { path: "register", element: <Register /> },
       { path: "login", element: <Login /> },
       { path: "productdetails/:id", element: <ProductDetails /> },
+      { path: "forgot-password", element: <ForgotPassword /> },
+      { path: "Verification", element: <Verification /> },
+      { path: "reset-password", element: <ResetPassword /> },
       {
         path: "wishlist",
         element: (
@@ -71,10 +82,15 @@ export default function App() {
         <QueryClientProvider client={reactQueryConfig}>
           <CartContextProvider>
             <RouterProvider router={router} />
-            <Toaster/>
+            <Toaster />
           </CartContextProvider>
         </QueryClientProvider>
       </AuthContext>
+      <Offline>
+        <div className="offline">
+          <h4 className="m-0 p-0">internet offline</h4>
+        </div>
+      </Offline>
     </>
   );
 }

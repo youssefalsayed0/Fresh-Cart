@@ -1,60 +1,45 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useContext } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { authContext } from "../../Context/AuthContext";
-import { cartContext } from "../../Context/CartContext";
 
 
-export default function Login() {
-
-  let { setToken , setUserName} = useContext(authContext);
-  let { getUserCart , getLoggedWishList} = useContext(cartContext);
-  
+export default function ForgotPassword() {
   const navigate = useNavigate();
 
   let user = {
-    password: "",
     email: "",
   };
 
-  async function loginUser(values) {
-    toast
-      .promise(
-        axios.post(
-          "https://ecommerce.routemisr.com/api/v1/auth/signin",
-          values
-        ),
-        {
-          loading: "Logging in...",
-          success: (response) => "Welcome Back! " + response.data.user.name,
-          error: (err) => err.response?.data?.message || "Failed to login",
+ async function sendCode(values) {
+  toast.promise(
+    axios.post("https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords", values),
+    {
+      loading: "Sending...",
+      success: (response) => {
+        // Check if statusMsg is "success"
+        if (response.data.statusMsg === "success") {
+          setTimeout(() => {
+            navigate("/verification");
+          }, 1500);
+          return "Code Sent To Your Email"; // Return success message
+        } else {
+          throw new Error("Unexpected response: " + response.data.statusMsg); // Handle unexpected statusMsg
         }
-      )
-      .then(function (response) {
-        localStorage.setItem("tkn", response.data.token);
-        localStorage.setItem("usr", response.data.user.name);
-        setToken(response.data.token);
-        setUserName(response.data.user.name);
-        getUserCart();
-        getLoggedWishList();
-        setTimeout(() => {
-      
-          navigate("/home");
-        }, 1500);
-      });
-  }
+      },
+      error: () => "Failed! Try Again Later Or Contact Us!",
+    }
+  );
+}
 
 
   const registerFormik = useFormik({
     initialValues: user,
-    onSubmit: loginUser,
-
+    onSubmit: sendCode,
     validationSchema: yup.object().shape({
       email: yup.string().email("Invalid Email").required(),
-      password: yup.string().min(6).max(12).required(),
+   
     }),
   });
 
@@ -72,8 +57,7 @@ export default function Login() {
                     Discover Products That Elevate Your Lifestyle.
                   </h2>
                   <p className="lead mb-5">
-                    Shop the latest trends, find everyday essentials, and
-                    experience a seamless shopping journey with us.
+                  Provide the email address associated with your account to recover your password.
                   </p>
                   <div className="text-endx">
                     <svg
@@ -97,9 +81,9 @@ export default function Login() {
                   <div className="row">
                     <div className="col-12">
                       <div className="mb-4">
-                        <h2 className="h3">LOGIN</h2>
+                        <h2 className="h3">Forgot Password</h2>
                         <h3 className="fs-6 fw-normal text-secondary m-0">
-                          Enter your details to login
+                          Enter your details to reset
                         </h3>
                       </div>
                     </div>
@@ -132,38 +116,10 @@ export default function Login() {
                           ""
                         )}
                       </div>
-
-                      <div className="col-12">
-                        <div className="form-floating mb-3">
-                          <input
-                            type="password"
-                            className="form-control"
-                            name="password"
-                            id="password"
-                            placeholder="Password"
-                            required
-                            value={registerFormik.values.password}
-                            onChange={registerFormik.handleChange}
-                            onBlur={registerFormik.handleBlur}
-                          />
-                          <label htmlFor="password" className="form-label">
-                            Password
-                          </label>
-                        </div>
-                        {registerFormik.errors.password &&
-                        registerFormik.touched.password ? (
-                          <div className="alert alert-danger" role="alert">
-                            {registerFormik.errors.password}
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-
                       <div className="col-12">
                         <div className="d-grid">
                           <button className="btn btn-dark btn-lg" type="submit">
-                            Login
+                            Submit
                           </button>
                         </div>
                       </div>
@@ -173,19 +129,13 @@ export default function Login() {
                     <div className="col-12">
                       <div className="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end mt-4">
                         <p className="m-0 text-secondary text-center">
-                          Already have an account?
-                          <Link className="link-primary " to="/register">
-                             Register
+                          Back to login ?
+                          <Link className="link-primary " to="/login">
+                             Login
                           </Link>
                         </p>
                       </div>
-                      <div className="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end mt-4">
-                        <p className="m-0 text-secondary text-center">
-                          <Link className="link-primary " to="/forgot-password">
-                       Forgot Password?
-                          </Link>
-                        </p>
-                      </div>
+                   
                     </div>
                   </div>
                 </div>
