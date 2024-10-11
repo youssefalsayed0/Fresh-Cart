@@ -1,10 +1,12 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
 export const cartContext = createContext();
 // eslint-disable-next-line react/prop-types
 export default function CartContextProvider({ children }) {
   //states..............................................................
   const [allProducts, setAllProducts] = useState(null);
+  const [allOrders, setAllOrders] = useState(null);
   const [numOfCartItems, setNumOfCartItems] = useState(null);
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [cartId, setCartId] = useState(null);
@@ -55,7 +57,6 @@ export default function CartContextProvider({ children }) {
         setCartId(response.data.data._id);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -79,7 +80,7 @@ export default function CartContextProvider({ children }) {
         return res;
       })
       .catch((error) => {
-        console.log(error);
+      
       });
   }
 
@@ -166,10 +167,21 @@ export default function CartContextProvider({ children }) {
         return false;
       });
   }
+ // ----------->> all orders <<-----------
+  async function getLoggedUserOrders() {
+    return axios.get(`https://ecommerce.routemisr.com/api/v1/orders/user/${jwtDecode(localStorage.getItem('tkn')).id}`)
+        .then((res) =>  {
+          setAllOrders(res.data);
+        })
+        .catch((error) =>
+           error);
+}
+
 
   useEffect(() => {
     getUserCart();
     getLoggedWishList();
+    getLoggedUserOrders();
   }, []);
 
   return (
@@ -194,7 +206,8 @@ export default function CartContextProvider({ children }) {
           addToWishList,
           removeItemFromWishList,
           setCartId,
-          updateUi
+          updateUi,
+          allOrders
         }}
       >
         {children}

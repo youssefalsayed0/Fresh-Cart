@@ -51,7 +51,7 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    const navLinks = offcanvasRef.current.querySelectorAll(".nav-link");
+    const navLinks = offcanvasRef.current.querySelectorAll(".navigation-link");
 
     const handleNavLinkClick = () => {
       closeOffcanvas();
@@ -112,22 +112,22 @@ export default function Navbar() {
           <div className="offcanvas-body text-center align-content-center">
             <ul className="navbar-nav me-auto text-uppercase">
               <li className="nav-item">
-                <NavLink className="nav-link" to="/" activeClassName="active">
+                <NavLink className="nav-link navigation-link" to="/" activeClassName="active">
                   Home
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="products" activeClassName="active">
+                <NavLink className="nav-link navigation-link" to="products" activeClassName="active">
                   Products
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="categories" activeClassName="active">
+                <NavLink className="nav-link navigation-link" to="categories" activeClassName="active">
                   Categories
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="brands" activeClassName="active">
+                <NavLink className="nav-link navigation-link" to="brands" activeClassName="active">
                   Brands
                 </NavLink>
               </li>
@@ -147,17 +147,17 @@ export default function Navbar() {
                   </span>
                   <ul className="dropdown-menu">
                     <li>
-                      <NavLink to="orders" className="dropdown-item nav-link">
+                      <NavLink to="orders" className="dropdown-item nav-link navigation-link">
                         Orders
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to="help" className="dropdown-item nav-link ">
+                      <NavLink to="help" className="dropdown-item nav-link navigation-link">
                         Need Help?
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to="contact" className="dropdown-item nav-link">
+                      <NavLink to="contact" className="dropdown-item nav-link navigation-link">
                         Contact Us
                       </NavLink>
                     </li>
@@ -165,7 +165,7 @@ export default function Navbar() {
                       <hr className="dropdown-divider" />
                     </li>
                     <li>
-                      <button className="dropdown-item nav-link" onClick={handleLogout}>
+                      <button className="dropdown-item nav-link navigation-link" onClick={handleLogout}>
                         Logout
                       </button>
                     </li>
@@ -174,19 +174,19 @@ export default function Navbar() {
               ) : (
                 <>
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="login" activeClassName="active">
+                    <NavLink className="nav-link navigation-link" to="login" activeClassName="active">
                       Log in
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="/register" activeClassName="active">
+                    <NavLink className="nav-link navigation-link" to="/register" activeClassName="active">
                       Signup
                     </NavLink>
                   </li>
                 </>
               )}
               <li className="nav-item">
-                <NavLink className="nav-link" to="wishlist" activeClassName="active">
+                <NavLink className="nav-link navigation-link" to="wishlist" activeClassName="active">
                   Wishlist
                   <i className="fa-solid fa-heart fa-lg fa-fw ms-2 position-relative" style={{ color: numOfFavoriteItems > 0 ? "red" : "" }}>
                     {numOfFavoriteItems > 0 ? <span className="wishlist-num position-absolute">{numOfFavoriteItems}</span> : null}
@@ -194,7 +194,7 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="cart" activeClassName="active">
+                <NavLink className="nav-link navigation-link" to="cart" activeClassName="active">
                   Cart
                   <i className="fa-solid fa-bag-shopping fa-lg fa-fw ms-2 position-relative" style={{ color: numOfCartItems > 0 ? "#5b8fff" : "" }}>
                     {numOfCartItems > 0 ? <span className="wishlist-num position-absolute">{numOfCartItems}</span> : null}

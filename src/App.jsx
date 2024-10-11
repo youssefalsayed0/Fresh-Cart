@@ -23,8 +23,7 @@ import { Offline } from "react-detect-offline";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import Verification from "./components/Verification/Verification";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
-
-
+import Orders from "./components/Ordres/Orders";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +43,7 @@ const router = createBrowserRouter([
       { path: "forgot-password", element: <ForgotPassword /> },
       { path: "Verification", element: <Verification /> },
       { path: "reset-password", element: <ResetPassword /> },
+      { path: "orders", element: <Orders /> },
       {
         path: "wishlist",
         element: (

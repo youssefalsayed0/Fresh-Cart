@@ -172,3 +172,16 @@ footer {
   background-color: rgb(255, 204, 37);
   border-radius: 20px;
 }
+
+
+.search-icon {
+  position: absolute;
+  left: 25px; /* Adjust this for horizontal positioning */
+  color: #ccc; /* Icon color */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.form-control {
+  padding-left: 35px; /* Add padding so the text doesn't overlap the icon */
+}

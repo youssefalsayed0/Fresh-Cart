@@ -7,11 +7,10 @@ import { cartContext } from "../../Context/CartContext";
 import { useContext } from "react";
 
 // eslint-disable-next-line react/prop-types
-export default function GetProducts({ limit, filter }) {
+export default function GetProducts({ searchTerm = "", categoryId = "all", limit, filter }) {
+  const { addProduct, addToWishList } = useContext(cartContext);
 
-  let { addProduct , addToWishList , } = useContext(cartContext);
-   
-
+  // Function to add product to cart
   async function addCartProduct(id) {
     await toast.promise(
       (async () => {
@@ -24,94 +23,55 @@ export default function GetProducts({ limit, filter }) {
       })(),
       {
         loading: "Adding Product...",
-        success: (msg) => msg, // Show success message
-        error: (error) => error.message, // Show error message
+        success: (msg) => msg,
+        error: (error) => error.message,
       }
     );
-};
-  
+  }
 
-
+  // Handler for adding to cart
   function handleAddCart(id) {
-      if (localStorage.getItem("tkn") == null) {
-        toast("You Have To Login First!", {
-          icon: "😀",
-        });
-      } else {
-        addCartProduct(id);
-      }
-  };
-  
-  async function addWishlist(id) {
-      await toast.promise(
-        (async () => {
-          const resFlag = await addToWishList(id);
-          if (resFlag === true) {
-            return "Successfully Saved!";
-          } else {
-            throw new Error("Something Went Wrong!");
-          }
-        })(),
-        {
-          loading: "Saving Product...",
-          success: (msg) => msg, // Show success message
-          error: (error) => error.message, // Show error message
-        }
-      );
-  };
-  
-  
-  function handleAddWishlist(id) {
-      if (localStorage.getItem("tkn") == null) {
-        toast("You Have To Login First!", {
-          icon: "😀",
-        });
-      }
-      else {
-        addWishlist(id);
-      }
-  };
-  
-  
-  // function checkFavorite() {
-  //       wishListDetails?.forEach(element => {
-  //           if (element?.id == allProducts.id) {
-  //               setIsFavorite(true);
-  //           }
-  //       });
-  // };
-  
-  // async function deleteProductFromWishList(productId) {
-  //     let res = await removeItemFromWishList(productId);
-  //     if (res?.data?.status === 'success') {
-  //         // setNumOfFavoriteItems(res?.data?.count);
-  //         setIsFavorite(false);
-  //         toast.success('Item removed Successfuly');
-  //         getWishListInfo();
-  //     }
-  //     else {
-  //         (res?.response?.data?.message === 'Expired Token. please login again') ?  toast.error("Failed to remove item") : "";
-  //     }
-  // };
-  
-  // async function addProductToWishList(productId) {
-  //     let res = await addToWishList(productId);
-  //     if (res?.data?.status === 'success') {
-  //         // setNumOfFavoriteItems(res?.data?.data?.length);
-  //         setIsFavorite(true);
-  //         toast.success(res?.data?.message);
-  //         getWishListInfo();
-  //     }
-  //     else {
-  //         (res?.response?.data?.message === 'Expired Token. please login again') ? toast.error("Failed to remove item") : toast.error("Failed to remove item");
-  //     }
-  // };
-  
-    
-function getAllProducts() {
-      return axios.get("https://ecommerce.routemisr.com/api/v1/products");
-}
+    if (!localStorage.getItem("tkn")) {
+      toast("You Have To Login First!", { icon: "😀" });
+    } else {
+      addCartProduct(id);
+    }
+  }
 
+  // Function to add product to wishlist
+  async function addWishlist(id) {
+    await toast.promise(
+      (async () => {
+        const resFlag = await addToWishList(id);
+        if (resFlag === true) {
+          return "Successfully Saved!";
+        } else {
+          throw new Error("Something Went Wrong!");
+        }
+      })(),
+      {
+        loading: "Saving Product...",
+        success: (msg) => msg,
+        error: (error) => error.message,
+      }
+    );
+  }
+
+  // Handler for adding to wishlist
+  function handleAddWishlist(id) {
+    if (!localStorage.getItem("tkn")) {
+      toast("You Have To Login First!", { icon: "😀" });
+    } else {
+      addWishlist(id);
+    }
+  }
+
+  // Function to fetch all products
+  function getAllProducts() {
+    return axios.get("https://ecommerce.routemisr.com/api/v1/products");
+  }
+
+  // Use react-query to fetch products
   const { data, isError, isLoading } = useQuery({
     queryFn: getAllProducts,
     queryKey: "allProducts",
@@ -138,17 +98,39 @@ function getAllProducts() {
     );
   }
 
+  const allProducts = data.data.data;
 
-const allProducts = data.data.data;
-// Apply filter if provided
-const filteredProducts = filter ? allProducts.filter(filter) : allProducts;
-// Limit the products to the specified number
-const displayedProducts = limit ? filteredProducts.slice(0, limit) : filteredProducts;
+ 
 
+  // Normalize search term to ensure it's a string
+  const normalizedSearchTerm = typeof searchTerm === "string" ? searchTerm.toLowerCase() : "";
+
+  // Filter products based on search term and category
+  const filteredProducts = allProducts.filter((product) => {
+    // Safeguard product title and category
+    const productTitle = product.title ? product.title.toLowerCase() : "";
+    const productCategoryId = product.category?._id || "";
+
+    // Match by search term
+    const matchesSearchTerm = productTitle.includes(normalizedSearchTerm);
+
+    // Match by category, if "all" is not selected
+    const matchesCategory = categoryId === "all" || productCategoryId === categoryId;
+
+    return matchesSearchTerm && matchesCategory;
+  });
+
+ 
+  // Apply additional filter if provided
+  const finalProducts = filter ? filteredProducts.filter(filter) : filteredProducts;
+
+  // Limit the products to the specified number
+  const displayedProducts = limit ? finalProducts.slice(0, limit) : finalProducts;
+
+ 
   return (
     <>
       {displayedProducts.length > 0 ? (
-        // Show the products if available
         <div className="get-products item">
           <div className="row gy-5">
             {displayedProducts.map((product) => (
@@ -167,9 +149,8 @@ const displayedProducts = limit ? filteredProducts.slice(0, limit) : filteredPro
                     <i className="fa-solid fa-cart-plus fa-lg"></i>
                   </button>
                   <button
-                  onClick={()=> handleAddWishlist(product.id)}
+                    onClick={() => handleAddWishlist(product.id)}
                     className="position-absolute btn add-whishlist"
-                    
                   >
                     <i className="fa-solid fa-heart fa-lg"></i>
                   </button>
@@ -183,7 +164,7 @@ const displayedProducts = limit ? filteredProducts.slice(0, limit) : filteredPro
                     </div>
                     <div className="text mt-2 px-3">
                       <span className="text-primary">
-                        {product.category.name}
+                        {product.category?.name || "Unknown Category"}
                       </span>
                       <h5 className="product-title mb-1">{product.title}</h5>
                       <div className="d-flex justify-content-between">
@@ -210,9 +191,8 @@ const displayedProducts = limit ? filteredProducts.slice(0, limit) : filteredPro
           </div>
         </div>
       ) : (
-        // Show a message if no products are available
         <div className="text-center py-5">
-          <h3>No products available </h3>
+          <h3>No products available.</h3>
         </div>
       )}
     </>
