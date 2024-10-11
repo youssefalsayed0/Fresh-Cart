@@ -50,23 +50,8 @@ export default function Navbar() {
     offcanvasElement.classList.remove("show");
   };
 
-  useEffect(() => {
-    const navLinks = offcanvasRef.current.querySelectorAll(".navigation-link");
-
-    const handleNavLinkClick = () => {
-      closeOffcanvas();
-    };
-
-    navLinks.forEach((link) =>
-      link.addEventListener("click", handleNavLinkClick)
-    );
-
-    return () => {
-      navLinks.forEach((link) =>
-        link.removeEventListener("click", handleNavLinkClick)
-      );
-    };
-  }, []);
+  // Remove the useEffect that adds event listeners
+  // Since we'll handle clicks via onClick handlers
 
   function handleLogout() {
     setToken(null);
@@ -81,53 +66,78 @@ export default function Navbar() {
   return (
     <nav
       ref={navbarRef}
-      className="navbar navbar-expand-lg shadow-sm z-3 bg-white "
+      className="navbar navbar-expand-lg shadow-sm z-3 bg-white"
     >
       <div className="container">
         <NavLink className="navbar-brand fs-4 fw-semibold" to="/">
           <i className="fa-solid fa-cart-shopping me-1"></i>
           FreshCart
         </NavLink>
-        <button className="navbar-toggler" type="button" onClick={toggleOffcanvas}>
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={toggleOffcanvas}
+        >
           <span className="navbar-toggler-icon" />
         </button>
 
         <div
           ref={offcanvasRef} // Reference to offcanvas
           className="offcanvas offcanvas-end"
-          tabIndex="1"
+          tabIndex="-1"
           id="offcanvasNavbar"
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className="offcanvas-header">
-            <Link
-              to="/home"
-              className="offcanvas-title"
-              id="offcanvasNavbarLabel"
-            >
+            <Link to="/home" className="offcanvas-title" id="offcanvasNavbarLabel">
               <h3>FreshCart</h3>
             </Link>
-            <button type="button" className="btn-close" onClick={closeOffcanvas} aria-label="Close"></button>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={closeOffcanvas}
+              aria-label="Close"
+            ></button>
           </div>
           <div className="offcanvas-body text-center align-content-center">
             <ul className="navbar-nav me-auto text-uppercase">
               <li className="nav-item">
-                <NavLink className="nav-link navigation-link" to="/" activeClassName="active">
+                <NavLink
+                  className="nav-link navigation-link"
+                  to="/"
+                  activeClassName="active"
+                  onClick={closeOffcanvas} // Add onClick handler
+                >
                   Home
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link navigation-link" to="products" activeClassName="active">
+                <NavLink
+                  className="nav-link navigation-link"
+                  to="/products"
+                  activeClassName="active"
+                  onClick={closeOffcanvas} // Add onClick handler
+                >
                   Products
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link navigation-link" to="categories" activeClassName="active">
+                <NavLink
+                  className="nav-link navigation-link"
+                  to="/categories"
+                  activeClassName="active"
+                  onClick={closeOffcanvas} // Add onClick handler
+                >
                   Categories
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link navigation-link" to="brands" activeClassName="active">
+                <NavLink
+                  className="nav-link navigation-link"
+                  to="/brands"
+                  activeClassName="active"
+                  onClick={closeOffcanvas} // Add onClick handler
+                >
                   Brands
                 </NavLink>
               </li>
@@ -135,7 +145,7 @@ export default function Navbar() {
 
             <ul className="navbar-nav mb-2 mb-lg-0 text-uppercase d-flex align-items-center">
               {token ? (
-                <li className="dropdown nav-item ">
+                <li className="dropdown nav-item">
                   <span
                     className="dropdown-toggle mx-2 py-2 d-inline-block"
                     role="button"
@@ -147,17 +157,29 @@ export default function Navbar() {
                   </span>
                   <ul className="dropdown-menu">
                     <li>
-                      <NavLink to="orders" className="dropdown-item nav-link navigation-link">
+                      <NavLink
+                        to="/orders"
+                        className="dropdown-item nav-link navigation-link"
+                        onClick={closeOffcanvas} // Add onClick handler
+                      >
                         Orders
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to="help" className="dropdown-item nav-link navigation-link">
+                      <NavLink
+                        to="/help"
+                        className="dropdown-item nav-link navigation-link"
+                        onClick={closeOffcanvas} // Add onClick handler
+                      >
                         Need Help?
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to="contact" className="dropdown-item nav-link navigation-link">
+                      <NavLink
+                        to="/contact"
+                        className="dropdown-item nav-link navigation-link"
+                        onClick={closeOffcanvas} // Add onClick handler
+                      >
                         Contact Us
                       </NavLink>
                     </li>
@@ -165,7 +187,13 @@ export default function Navbar() {
                       <hr className="dropdown-divider" />
                     </li>
                     <li>
-                      <button className="dropdown-item nav-link navigation-link" onClick={handleLogout}>
+                      <button
+                        className="dropdown-item nav-link navigation-link"
+                        onClick={() => {
+                          handleLogout();
+                          closeOffcanvas(); // Ensure offcanvas closes on logout
+                        }}
+                      >
                         Logout
                       </button>
                     </li>
@@ -174,30 +202,64 @@ export default function Navbar() {
               ) : (
                 <>
                   <li className="nav-item">
-                    <NavLink className="nav-link navigation-link" to="login" activeClassName="active">
+                    <NavLink
+                      className="nav-link navigation-link"
+                      to="/login"
+                      activeClassName="active"
+                      onClick={closeOffcanvas} // Add onClick handler
+                    >
                       Log in
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink className="nav-link navigation-link" to="/register" activeClassName="active">
+                    <NavLink
+                      className="nav-link navigation-link"
+                      to="/register"
+                      activeClassName="active"
+                      onClick={closeOffcanvas} // Add onClick handler
+                    >
                       Signup
                     </NavLink>
                   </li>
                 </>
               )}
               <li className="nav-item">
-                <NavLink className="nav-link navigation-link" to="wishlist" activeClassName="active">
+                <NavLink
+                  className="nav-link navigation-link"
+                  to="/wishlist"
+                  activeClassName="active"
+                  onClick={closeOffcanvas} // Add onClick handler
+                >
                   Wishlist
-                  <i className="fa-solid fa-heart fa-lg fa-fw ms-2 position-relative" style={{ color: numOfFavoriteItems > 0 ? "red" : "" }}>
-                    {numOfFavoriteItems > 0 ? <span className="wishlist-num position-absolute">{numOfFavoriteItems}</span> : null}
+                  <i
+                    className="fa-solid fa-heart fa-lg fa-fw ms-2 position-relative"
+                    style={{ color: numOfFavoriteItems > 0 ? "red" : "" }}
+                  >
+                    {numOfFavoriteItems > 0 ? (
+                      <span className="wishlist-num position-absolute">
+                        {numOfFavoriteItems}
+                      </span>
+                    ) : null}
                   </i>
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link navigation-link" to="cart" activeClassName="active">
+                <NavLink
+                  className="nav-link navigation-link"
+                  to="/cart"
+                  activeClassName="active"
+                  onClick={closeOffcanvas} // Add onClick handler
+                >
                   Cart
-                  <i className="fa-solid fa-bag-shopping fa-lg fa-fw ms-2 position-relative" style={{ color: numOfCartItems > 0 ? "#5b8fff" : "" }}>
-                    {numOfCartItems > 0 ? <span className="wishlist-num position-absolute">{numOfCartItems}</span> : null}
+                  <i
+                    className="fa-solid fa-bag-shopping fa-lg fa-fw ms-2 position-relative"
+                    style={{ color: numOfCartItems > 0 ? "#5b8fff" : "" }}
+                  >
+                    {numOfCartItems > 0 ? (
+                      <span className="wishlist-num position-absolute">
+                        {numOfCartItems}
+                      </span>
+                    ) : null}
                   </i>
                 </NavLink>
               </li>
